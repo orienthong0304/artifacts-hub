@@ -1,5 +1,8 @@
 # Artifacts — 自托管的 AI 作品分享站
 
+[![CI](https://github.com/orienthong0304/artifacts-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/orienthong0304/artifacts-hub/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-coral.svg)](LICENSE)
+
 把 AI 生成的单文件 React 组件 / HTML 页面 / 前端构建产物，变成可分享的在线链接。
 自己部署，管理自己的作品私域；内建 MCP server，Claude Code / Cursor 等 AI Agent 可以直接发布作品。
 
@@ -97,6 +100,11 @@ cd server && npm install && npm run dev   # API :8091（需 DATABASE_URL）
 
 - `index.html` 的 preconnect / OG 标签、`public/sitemap.xml` 仍指向上游实例的域名，换域后请自行替换（不影响功能，只影响 SEO 元数据）
 - `src/app/lib/guides-data.json` 的四篇使用指南是上游实例的内容，可整体替换或删除
+
+## 贡献
+
+欢迎 Issue 与 PR，流程与改动纪律见 [CONTRIBUTING.md](CONTRIBUTING.md)
+（本仓库由私有主线定期同步发布，PR 合入方式略特殊，请先读一眼）。
 
 ## License
 
