@@ -1,0 +1,27 @@
+# API 镜像（多阶段）：构建 context = 仓库根 —— server 依赖 file:../mcp
+# （平台内嵌 MCP 端点复用 mcp 包的工具注册，契约 §3.13），故 mcp/ 必须在 context 内。
+FROM node:20-alpine AS build
+WORKDIR /app
+# mcp 先装先建：server 的 npm ci 解析 file:../mcp 时 dist 必须就绪（prepare 钩子会构建）
+COPY mcp/package.json mcp/package-lock.json mcp/tsconfig.json mcp/
+COPY mcp/src mcp/src
+RUN cd mcp && npm ci
+# server：.npmrc 的 install-links=true 让 artifacts-mcp 以实体拷贝进 node_modules
+# （symlink 会在多阶段 COPY 后断链）
+COPY server/package.json server/package-lock.json server/.npmrc server/
+RUN cd server && npm ci
+COPY server/tsconfig.json server/schema.sql server/sensitive-words.example.txt server/
+COPY server/src server/src
+RUN cd server && npm run build && npm prune --omit=dev
+
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app/server/node_modules ./node_modules
+COPY --from=build /app/server/dist ./dist
+COPY --from=build /app/server/schema.sql ./schema.sql
+COPY --from=build /app/server/sensitive-words.example.txt ./sensitive-words.example.txt
+COPY server/package.json ./
+EXPOSE 8091
+USER node
+CMD ["node", "dist/index.js"]

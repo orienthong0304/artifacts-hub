@@ -19,7 +19,9 @@ services:
       retries: 10
 
   api:
-    build: ./server
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     depends_on:
       db:
         condition: service_healthy

@@ -35,6 +35,10 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: server/package-lock.json
+      # server 依赖 file:../mcp（内嵌 MCP 端点）：先装 mcp 依赖，
+      # 否则 file: 安装触发的 prepare（tsc 构建）缺 typescript 而失败
+      - run: npm ci
+        working-directory: mcp
       - run: npm ci
       - run: npm run build
       - run: npm test

@@ -76,30 +76,26 @@ const CURL_EXAMPLE = `curl -X POST ${SITE_ORIGIN}/api/artifacts \\
   -d '{"title":"我的作品","type":"html","code":"<h1>Hello</h1>","visibility":"unlisted"}'`;
 
 /**
- * MCP 接入（契约 §3.8 MCP 小节）。
- *
- * 为什么是克隆构建而不是 `npx github:`：npm 的 git 依赖**不支持子目录**，
- * 而本仓库的 MCP 包在 `mcp/` 下、根 package.json 是主站——`npx github:...` 会拉到主站。
- * 在包发布到 npm 之前，克隆构建是唯一跑得通的路径，所以这里给准确的那一条。
+ * MCP 接入（契约 §3.13）：平台内嵌 Streamable HTTP 端点——填 URL + Bearer Token 即连，
+ * 零本地安装（2026-08-31 起替代此前的克隆构建 stdio 方案；stdio 入口仍在 mcp/ 保留给
+ * 本地开发场景）。
  */
-const MCP_SETUP_SH = `git clone https://github.com/orienthong0304/artifact.git
-cd artifact/mcp && npm install && npm run build
-pwd   # 记下这个路径，下一步要用`;
+const MCP_URL = `${SITE_ORIGIN}/api/mcp`;
 
-/** 下面三段接入片段：token 为空时用占位符，一次性面板里会内联真实 token */
+/** 下面接入片段：token 为空时用占位符，一次性面板里会内联真实 token */
 const tokenOr = (token?: string) => token || '<你的Token>';
 
 const mcpClaudeCodeCmd = (token?: string) =>
-  `claude mcp add artifacts --env ARTIFACTS_TOKEN=${tokenOr(token)} -- node <上一步的路径>/dist/index.js`;
+  `claude mcp add --transport http artifacts ${MCP_URL} --header "Authorization: Bearer ${tokenOr(token)}"`;
 
 const mcpJsonConfig = (token?: string) =>
   `{
   "mcpServers": {
     "artifacts": {
-      "command": "node",
-      "args": ["<上一步的路径>/dist/index.js"],
-      "env": {
-        "ARTIFACTS_TOKEN": "${tokenOr(token)}"
+      "type": "http",
+      "url": "${MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${tokenOr(token)}"
       }
     }
   }
@@ -370,10 +366,11 @@ export default function DevelopersPage() {
         </div>
 
         <div>
-          <h3 className="mb-2 font-serif text-base font-semibold text-ink">方式二：MCP（推荐 Claude Code 用户）</h3>
+          <h3 className="mb-2 font-serif text-base font-semibold text-ink">方式二：MCP（推荐，零安装）</h3>
           <p className="mb-2 text-xs text-ink-muted">
-            仓库 <code className="font-mono">mcp/</code> 子包提供 stdio MCP server（
-            <code className="font-mono">cd mcp && npm install && npm run build</code> 构建），
+            平台自带远程 MCP 服务（Streamable HTTP）：
+            <code className="font-mono text-ink">{MCP_URL}</code>
+            ，在任何支持 MCP 的客户端里填 URL + Token 即连，无需在本地安装任何东西。
             注册后可在对话里直接说「发布这个页面」「把上周那个看板改一下」——共八个工具：
           </p>
           <ul className="mb-3 space-y-1 text-xs text-ink-muted">
@@ -398,18 +395,16 @@ export default function DevelopersPage() {
               <code className="font-mono text-ink">create_temp_link</code> 限时分享
             </li>
           </ul>
-          <p className="mb-2 text-xs text-ink-muted">第一步：克隆并构建 MCP server（一次性）</p>
-          <CodeBlock code={MCP_SETUP_SH} />
-          <p className="mb-2 mt-3 text-xs text-ink-muted">第二步：Claude Code 一条命令注册</p>
+          <p className="mb-2 text-xs text-ink-muted">Claude Code 一条命令注册：</p>
           <CodeBlock code={MCP_CLAUDE_CODE_CMD} />
           <p className="mb-2 mt-3 text-xs text-ink-muted">
-            Claude Desktop / Cursor / Cline 用 JSON 配置（写入各自的 MCP 配置文件）：
+            Cursor / Claude Desktop / 千问办公等支持 Streamable HTTP 的客户端，用 JSON 配置：
           </p>
           <CodeBlock code={MCP_JSON_CONFIG} />
           <p className="mt-2 text-xs text-ink-muted">
-            注：npm 的 git 依赖不支持子目录，本包位于仓库的{' '}
-            <code className="font-mono">mcp/</code> 下，因此暂用克隆构建方式接入；
-            发布到 npm 后会改为 <code className="font-mono">npx artifacts-mcp</code> 直用。
+            Token 即 API Token（上方创建），等同你的账号权限，请像密码一样保管。
+            偏好本地进程（stdio）的开发者仍可用仓库 <code className="font-mono">mcp/</code>{' '}
+            子包克隆构建接入。
           </p>
         </div>
 

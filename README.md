@@ -73,17 +73,32 @@ docker compose up -d --build
 
 不配置时平台以单域模式运行：作品走 `/a/<slug>` 路径，一切功能可用，只是没有子域形态的地址。
 
-## AI Agent 接入（MCP）
+## AI Agent 接入（MCP，零安装）
+
+平台自带远程 MCP 服务（Streamable HTTP）——部署起来后 `/api/mcp` 就是 MCP 端点，
+任何支持 MCP 的客户端填 URL + Token 即连：
 
 ```bash
-cd mcp && npm install && npm run build
-claude mcp add artifacts \
-  --env ARTIFACTS_API_BASE=https://你的域名/api \
-  --env ARTIFACTS_TOKEN=ak_xxx \
-  -- node /绝对路径/mcp/dist/index.js
+claude mcp add --transport http artifacts https://你的域名/api/mcp \
+  --header "Authorization: Bearer ak_xxx"
+```
+
+Cursor / 其他客户端用 JSON 配置：
+
+```json
+{
+  "mcpServers": {
+    "artifacts": {
+      "type": "http",
+      "url": "https://你的域名/api/mcp",
+      "headers": { "Authorization": "Bearer ak_xxx" }
+    }
+  }
+}
 ```
 
 API Token 在站内 `/developers` 页创建。之后对 Agent 说「把这个页面发布到我的 Artifacts」即可。
+（偏好本地进程的开发者仍可用 `mcp/` 子包的 stdio 形态，见其 README。）
 
 ## 开发
 

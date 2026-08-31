@@ -1,5 +1,16 @@
 # artifacts-mcp
 
+> **推荐接入方式已改为平台内嵌的远程 MCP（Streamable HTTP）——零安装：**
+>
+> ```bash
+> claude mcp add --transport http artifacts https://artifacts.orienthong.cn/api/mcp \
+>   --header "Authorization: Bearer ak_你的Token"
+> ```
+>
+> （自托管实例把域名换成你自己的；Token 在站内 `/developers` 页创建。）
+> 本目录的 stdio 形态保留给本地开发 / 离线场景，接入方式见下文。
+
+
 Artifacts 开放平台的 MCP server：让 Claude Code / Cursor / Cline 等 AI Agent 在对话里直接发布、更新作品，并生成限时分享链接。stdio transport，仅依赖平台公开 HTTP API（Bearer Token 鉴权）。
 
 ## 前置：创建 API Token

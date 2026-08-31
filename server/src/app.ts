@@ -10,6 +10,7 @@ import { tokensRouter } from './routes/tokens.js';
 import { sitesRouter } from './routes/sites.js';
 import { adminRouter } from './routes/admin.js';
 import { subdomainGate, subauthRouter } from './routes/serve.js';
+import { createMcpRouter } from './routes/mcp.js';
 
 export const app = new Hono<{ Variables: AuthVariables }>();
 
@@ -35,6 +36,8 @@ app.route('/api', tokensRouter);
 app.route('/api', subauthRouter);
 app.route('/api', sitesRouter);
 app.route('/api/admin', adminRouter);
+// MCP Streamable HTTP 端点（契约 §3.13）：getApp 注入避免循环依赖
+app.route('/api', createMcpRouter(() => app));
 
 app.notFound((c) => c.json({ error: '接口不存在' }, 404));
 
