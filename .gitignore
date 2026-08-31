@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# ZIP 站点托管本地存储（契约 §3.9，SITES_ROOT 默认值）
+sites-data/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+deploy.sh
+
+# Local Netlify folder
+.netlify
+
+**/.claude/settings.local.json
+
+.env
+
+
+.yarn/*
+
+.cursor/*
+.claude/*
+
+# 生产敏感词词表不入 git（仓库只保留 sensitive-words.example.txt）
+server/sensitive-words.txt

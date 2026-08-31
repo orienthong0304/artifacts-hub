@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>渲染器自检 · Artifacts</title>
+<!--
+  渲染器自检页（能力波次 1 · W1-4）。
+
+  三重价值：
+  ① 任何一次 runner 部署，10 秒内可验证，不必去线上找一个真实作品；
+  ② 本仓库不设前端测试栈，这是结构化 error 码在真实浏览器里唯一的 fixture 面；
+  ③ 把 owner-blocked.md 的「微信 X5 真机实测」从「需要真机流程」变成
+     「在微信里打开一个链接看 pass/fail」——那一项自 2026-07-22 起结果列全空，
+     而它是「移动端/微信是我方主渠道」这一立论的证据基础。
+
+  本页只用 postMessage 驱动同源下的 runner，不依赖登录、不写任何数据。
+-->
+<style>
+  :root { color-scheme: light }
+  html,body{margin:0;background:#faf9f5;color:#1a1915;
+    font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+  .wrap{max-width:52rem;margin:0 auto;padding:32px 20px 64px}
+  h1{font-size:1.4rem;margin:0 0 4px}
+  .meta{font-size:.8rem;color:#6b6963;margin-bottom:20px}
+  .meta code{background:#fff;border:1px solid #e5e2da;border-radius:6px;padding:1px 6px}
+  .case{border:1px solid #e5e2da;border-radius:12px;background:#fff;margin-bottom:16px;overflow:hidden}
+  .hd{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #e5e2da;font-size:.9rem}
+  .tag{font-size:.72rem;padding:2px 8px;border-radius:999px;background:#f2efe9;color:#6b6963}
+  .pass{background:#e7f3ec;color:#1c6b3f}
+  .fail{background:#fbe9e4;color:#a33a1c}
+  .wait{background:#f2efe9;color:#6b6963}
+  .bd{padding:12px 14px;font-size:.8rem;color:#6b6963}
+  .bd pre{white-space:pre-wrap;word-break:break-word;margin:6px 0 0;font-size:.72rem}
+  iframe{display:block;width:100%;height:180px;border:0;border-top:1px solid #e5e2da;background:#fff}
+  .sum{margin:20px 0;padding:12px 14px;border-radius:12px;font-size:.9rem;font-weight:600}
+  a{color:#c96442}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>渲染器自检</h1>
+  <div class="meta">
+    构建标识 <code id="build">检测中…</code> ·
+    vendor <code id="vendor">—</code> ·
+    <a href="https://artifacts.orienthong.cn/">回到 Artifacts</a>
+  </div>
+  <div class="sum wait" id="sum">检测中…</div>
+  <div id="cases"></div>
+  <p class="meta">
+    在微信里打开这个链接：如果下方两个用例都通过，说明微信内置浏览器能正常渲染我方作品。
+    结果请回填 <code>docs/ops/wechat-x5-checklist.md</code>。
+  </p>
+</div>
+<script>
+(function () {
+  // 用例：期望的 error code（null 表示期望渲染成功）
+  var CASES = [
+    {
+      name: '正常 React 组件',
+      kind: 'react',
+      expect: null,
+      code: 'export default function App(){return <div style={{padding:24,fontFamily:"system-ui"}}><b>渲染成功</b> — 如果你能看到这行字，转译与挂载都正常。</div>;}'
+    },
+    {
+      name: '白名单外依赖（期望 IMPORT_NOT_ALLOWED）',
+      kind: 'react',
+      expect: 'IMPORT_NOT_ALLOWED',
+      code: "import echarts from 'echarts';\nexport default function App(){return <div>{String(echarts)}</div>;}"
+    }
+  ];
+
+  var root = document.getElementById('cases');
+  var results = [];
+
+  CASES.forEach(function (c, i) {
+    var box = document.createElement('div');
+    box.className = 'case';
+    box.innerHTML =
+      '<div class="hd"><span class="tag wait" id="t' + i + '">等待</span><span>' + c.name + '</span></div>' +
+      '<div class="bd" id="b' + i + '">驱动中…</div>';
+    var frame = document.createElement('iframe');
+    frame.src = '/';
+    frame.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-modals');
+    box.appendChild(frame);
+    root.appendChild(box);
+
+    var settled = false;
+    function settle(ok, text) {
+      if (settled) return;
+      settled = true;
+      var t = document.getElementById('t' + i);
+      t.className = 'tag ' + (ok ? 'pass' : 'fail');
+      t.textContent = ok ? 'PASS' : 'FAIL';
+      document.getElementById('b' + i).innerHTML = '<pre></pre>';
+      document.getElementById('b' + i).querySelector('pre').textContent = text;
+      results[i] = ok;
+      render();
+    }
+
+    window.addEventListener('message', function (e) {
+      if (e.source !== frame.contentWindow) return;
+      var d = e.data;
+      if (!d || d.__artifacts !== true) return;
+      if (d.type === 'ready') {
+        if (d.runner) {
+          var parts = String(d.runner).split('+v');
+          document.getElementById('build').textContent = parts[0] || d.runner;
+          document.getElementById('vendor').textContent = parts[1] || '—';
+        }
+        frame.contentWindow.postMessage(
+          { __artifacts: true, type: 'render', payload: { kind: c.kind, code: c.code, badge: false } },
+          '*'
+        );
+        return;
+      }
+      if (d.type === 'rendered') {
+        settle(c.expect === null, c.expect === null ? '渲染成功（符合预期）' : '期望报错 ' + c.expect + '，但渲染成功了');
+        return;
+      }
+      if (d.type === 'error' && d.fatal !== false) {
+        var got = d.code || '(无 code)';
+        settle(
+          got === c.expect,
+          '收到 code=' + got + (c.expect ? '，期望 ' + c.expect : '，但期望渲染成功') + '\n' + (d.message || '')
+        );
+      }
+    });
+
+    setTimeout(function () { settle(false, '超时：15 秒内没有收到 rendered 或 error'); }, 15000);
+  });
+
+  function render() {
+    var done = results.filter(function (r) { return r !== undefined; }).length;
+    var ok = results.filter(function (r) { return r === true; }).length;
+    var el = document.getElementById('sum');
+    if (done < CASES.length) { el.textContent = '检测中… ' + done + '/' + CASES.length; return; }
+    var allPass = ok === CASES.length;
+    el.className = 'sum ' + (allPass ? 'pass' : 'fail');
+    el.textContent = allPass ? '全部通过 ✓ ' + ok + '/' + CASES.length : '有用例失败 ✗ ' + ok + '/' + CASES.length;
+  }
+})();
+</script>
+</body>
+</html>

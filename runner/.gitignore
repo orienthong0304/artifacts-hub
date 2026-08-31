@@ -1,0 +1,4 @@
+node_modules/
+dist/
+# vendor 产物由 npm run build:vendor 生成（tailwind.js 从 assets/ 拷贝）
+public/vendor/

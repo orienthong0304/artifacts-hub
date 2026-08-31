@@ -1,0 +1,4 @@
+# 敏感词词表示例：每行一个词，# 开头为注释。
+# 生产环境通过 SENSITIVE_WORDS_PATH 挂载真实词表（不入 git）。
+测试违禁词
+badword-example

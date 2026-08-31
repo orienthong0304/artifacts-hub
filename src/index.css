@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ===== Artifacts 平台设计 tokens（契约第 6 节）===== */
+    --bg: #FAF9F5;            /* 米白背景 */
+    --surface: #FFFFFF;       /* 卡片表面 */
+    --ink: #1A1915;           /* 暖黑文字 */
+    --ink-muted: #6E6B64;     /* 次要文字 */
+    --accent: #D97757;        /* Claude 珊瑚橙 */
+    --accent-ink: #FFFFFF;    /* 强调色上的文字 */
+    /* 边框 token #E8E5DE，以 HSL 分量形式提供给 shadcn（见 --border） */
+
+    /* ===== shadcn 语义变量（映射为同一套 Claude 色板的 HSL 分量）===== */
+    --background: 48 33% 97%;          /* = #FAF9F5 */
+    --foreground: 48 11% 9%;           /* = #1A1915 */
+    --card: 0 0% 100%;                 /* = #FFFFFF */
+    --card-foreground: 48 11% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 48 11% 9%;
+    --primary: 48 11% 9%;              /* 黑色主按钮 */
+    --primary-foreground: 48 33% 97%;
+    --secondary: 45 23% 93%;           /* 暖灰浅底 */
+    --secondary-foreground: 48 11% 9%;
+    --muted: 45 23% 93%;
+    --muted-foreground: 42 5% 41%;     /* = #6E6B64 */
+    --accent-soft: 20 45% 94%;         /* 珊瑚橙浅底（hover/选中）*/
+    --accent-soft-foreground: 48 11% 9%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 42 18% 89%;              /* = #E8E5DE */
+    --input: 42 18% 89%;
+    --ring: 15 63% 60%;                /* = #D97757 */
+    --radius: 0.5rem;
+    /* 站头实际高度：由 SiteHeader 在挂载时用 ResizeObserver 写入真实值。
+       这里的 3.5rem 只是首帧兜底（窄屏站头会换成两行，比它高）。 */
+    --header-h: 3.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  /* 标题衬线（Claude 风格） */
+  h1, h2 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  /* 卡片右上角折角装饰（对齐 Claude Artifacts gallery） */
+  .card-fold {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-fold::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 22px 22px 0;
+    /* 上层三角 = 页面底色（露出被"翻起"的缺口），下层三角 = 折页阴影面 */
+    border-color: var(--bg) var(--bg) #EFECE4 #EFECE4;
+    box-shadow: -1px 1px 2px rgba(26, 25, 21, 0.08);
+    z-index: 1;
+    transition: border-width 0.2s ease;
+  }
+  .card-fold:hover::before {
+    border-width: 0 26px 26px 0;
+  }
+}

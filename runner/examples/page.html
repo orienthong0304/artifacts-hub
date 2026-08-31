@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>产品发布倒计时</title>
+  <!-- 故意不引用任何外部 CDN：Tailwind 由 runner 注入的自托管 runtime 提供 -->
+</head>
+<body class="bg-gradient-to-br from-amber-50 to-orange-100 min-h-screen flex items-center justify-center p-6">
+  <main class="max-w-lg w-full bg-white rounded-2xl shadow-xl p-10 text-center space-y-6">
+    <span class="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold tracking-wide">
+      测试样例 3 · 完整 HTML
+    </span>
+    <h1 class="text-3xl font-bold text-stone-900">新品发布倒计时</h1>
+    <p class="text-stone-500 text-sm">Tailwind 类名由 runner 注入的自托管 runtime 实时生成</p>
+    <div id="countdown" class="flex justify-center gap-4 text-stone-900"></div>
+    <button id="reset" class="mt-2 px-6 py-2 rounded-lg bg-stone-900 text-white text-sm hover:bg-stone-700 transition-colors">
+      重置为 24 小时
+    </button>
+  </main>
+  <script>
+    var deadline = Date.now() + 24 * 3600 * 1000;
+    var box = document.getElementById("countdown");
+    function pad(n) { return String(n).padStart(2, "0"); }
+    function cell(value, label) {
+      return (
+        '<div class="w-20 py-3 rounded-xl bg-stone-100"><div class="text-2xl font-mono font-bold">' +
+        value +
+        '</div><div class="text-xs text-stone-500 mt-1">' +
+        label +
+        "</div></div>"
+      );
+    }
+    function tick() {
+      var left = Math.max(0, deadline - Date.now());
+      var h = Math.floor(left / 3600000);
+      var m = Math.floor((left % 3600000) / 60000);
+      var s = Math.floor((left % 60000) / 1000);
+      box.innerHTML = cell(pad(h), "时") + cell(pad(m), "分") + cell(pad(s), "秒");
+    }
+    document.getElementById("reset").addEventListener("click", function () {
+      deadline = Date.now() + 24 * 3600 * 1000;
+      tick();
+    });
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>

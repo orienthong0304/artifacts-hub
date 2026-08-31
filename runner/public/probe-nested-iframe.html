@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>嵌套 iframe origin 探针 · Artifacts</title>
+<!--
+  封面自动截图路线的硬闸门（能力波次 1 · W1-4，站长批复 2）。
+
+  背景：技术评审读了 node_modules/html2canvas —— 它有 1 处 createElement('iframe')
+  与 11 处 contentWindow：实现方式是把 DOM 克隆进一个新 iframe，再通过
+  iframe.contentWindow.document 读写克隆体。
+
+  按 HTML 规范，我方内层文档（sandbox="allow-scripts"，无 allow-same-origin）创建的
+  子 iframe 会**继承 sandboxed origin 标志**并拿到一个新的 opaque origin，
+  访问 contentDocument 应抛 SecurityError。若成立，「html2canvas 只读自己的 DOM」
+  这句话对它不成立 → html2canvas 出局，封面走 SVG foreignObject 自研序列化
+  （该方案不需要任何嵌套浏览上下文）。
+
+  这个探针不猜，直接在真实浏览器里测一次。30 行，零依赖。
+-->
+<style>
+  html,body{margin:0;background:#faf9f5;color:#1a1915;
+    font-family:system-ui,-apple-system,"PingFang SC",sans-serif;line-height:1.6}
+  .wrap{max-width:44rem;margin:0 auto;padding:32px 20px}
+  h1{font-size:1.3rem;margin:0 0 12px}
+  .r{padding:12px 14px;border-radius:12px;margin:14px 0;font-size:.9rem;font-weight:600}
+  .ok{background:#e7f3ec;color:#1c6b3f}
+  .no{background:#fbe9e4;color:#a33a1c}
+  pre{background:#fff;border:1px solid #e5e2da;border-radius:8px;padding:12px;
+    font-size:.75rem;color:#6b6963;white-space:pre-wrap;word-break:break-word}
+  p{color:#6b6963;font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>嵌套 iframe origin 探针</h1>
+  <p>
+    在一个 <code>sandbox="allow-scripts"</code>（无 <code>allow-same-origin</code>）的 iframe 内部，
+    再创建一个空 iframe，尝试访问它的 <code>contentDocument</code>。
+    这正是 html2canvas 截图时做的事。
+  </p>
+  <div class="r" id="r">测试中…</div>
+  <pre id="d">—</pre>
+  <p>
+    <b>抛异常（预期）</b> → html2canvas 在我方沙箱内不可用，封面能力改走
+    SVG <code>foreignObject</code> 自研序列化路线。<br>
+    <b>可访问</b> → html2canvas 复活，封面可按原方案实现。
+  </p>
+</div>
+<script>
+(function () {
+  var probe = document.createElement('iframe');
+  // 关键：与我方内层执行环境同款 sandbox（无 allow-same-origin）
+  probe.setAttribute('sandbox', 'allow-scripts');
+  probe.style.cssText = 'position:fixed;left:-9999px;width:200px;height:120px';
+  probe.srcdoc = [
+    '<!doctype html><html><body><div id="m">marker</div><script>',
+    '(function(){',
+    '  var out;',
+    '  try {',
+    '    var child = document.createElement("iframe");',
+    '    document.body.appendChild(child);',
+    '    var doc = child.contentDocument;',   // html2canvas 就是在这一步读克隆体
+    '    if (!doc) { out = { ok:false, why:"contentDocument 为 null（未抛异常但不可用）" }; }',
+    '    else {',
+    '      doc.open(); doc.write("<p id=t>x</p>"); doc.close();',
+    '      out = { ok: !!doc.getElementById("t"), why:"contentDocument 可读写" };',
+    '    }',
+    '  } catch (e) {',
+    '    out = { ok:false, why: (e && e.name ? e.name + ": " : "") + (e && e.message ? e.message : String(e)) };',
+    '  }',
+    '  out.origin = String(location.origin);',
+    '  parent.postMessage({ __probe: true, result: out }, "*");',
+    '})();',
+    '<\/script></body></html>'
+  ].join('\n');
+
+  var settled = false;
+  window.addEventListener('message', function (e) {
+    if (e.source !== probe.contentWindow) return;
+    if (!e.data || e.data.__probe !== true) return;
+    settled = true;
+    var r = e.data.result;
+    var el = document.getElementById('r');
+    el.className = 'r ' + (r.ok ? 'ok' : 'no');
+    el.textContent = r.ok
+      ? '可访问 → html2canvas 路线可行'
+      : '被阻断 → html2canvas 出局，改走 SVG foreignObject';
+    document.getElementById('d').textContent =
+      '内层 origin: ' + r.origin + '\n结果: ' + r.why;
+  });
+
+  document.body.appendChild(probe);
+  setTimeout(function () {
+    if (settled) return;
+    document.getElementById('r').className = 'r no';
+    document.getElementById('r').textContent = '超时：内层脚本未回报（沙箱可能连脚本都没跑起来）';
+  }, 8000);
+})();
+</script>
+</body>
+</html>

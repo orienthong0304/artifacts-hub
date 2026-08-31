@@ -1,0 +1,513 @@
+{
+  "public": [
+    {
+      "file": "Fiona.tsx",
+      "title": "Fiona"
+    },
+    {
+      "file": "SmartSVG/sse-test-tool.tsx",
+      "title": "SmartSVG/sse-test-tool"
+    },
+    {
+      "file": "SmartSVG/test.tsx",
+      "title": "SmartSVG/test"
+    },
+    {
+      "file": "ai-application-scenarios.tsx",
+      "title": "ai-application-scenarios"
+    },
+    {
+      "file": "ai-consulting/ai-consulting-analysis.tsx",
+      "title": "咨询基础逻辑与知识库关系图"
+    },
+    {
+      "file": "ai-consulting/ai-consulting-lecture.tsx",
+      "title": "AI+咨询顾问：专业性+写作+表达能力"
+    },
+    {
+      "file": "ai-consulting/ai-consulting-practice.tsx",
+      "title": "南方产权AI项目规划实践"
+    },
+    {
+      "file": "ai-consulting/ai-consulting-transformation.tsx",
+      "title": "AI规划咨询 - 国央企转型的新引擎"
+    },
+    {
+      "file": "ai-consulting/index.tsx",
+      "title": "二分公司2025年第二期融智技术论坛"
+    },
+    {
+      "file": "ai-consulting/southern-property-platform.tsx",
+      "title": "ai-consulting/southern-property-platform"
+    },
+    {
+      "file": "ai-demo/content-factory-demo.tsx",
+      "title": "ai-demo/content-factory-demo"
+    },
+    {
+      "file": "ai-yuan/efficiency_report_ppt.tsx",
+      "title": "ai-yuan/efficiency_report_ppt"
+    },
+    {
+      "file": "article-detail-enhanced.tsx",
+      "title": "article-detail-enhanced"
+    },
+    {
+      "file": "artifact-studio.tsx",
+      "title": "artifact-studio"
+    },
+    {
+      "file": "background-slides.tsx",
+      "title": "background-slides"
+    },
+    {
+      "file": "case-study-ppt.tsx",
+      "title": "case-study-ppt"
+    },
+    {
+      "file": "case-study-slides.tsx",
+      "title": "case-study-slides"
+    },
+    {
+      "file": "cc-extension.tsx",
+      "title": "CC-Extension 项目介绍"
+    },
+    {
+      "file": "claude-example/claude-text-editor.tsx",
+      "title": "AI 智能报告撰写系统"
+    },
+    {
+      "file": "cow-numbering-visualizer.tsx",
+      "title": "cow-numbering-visualizer"
+    },
+    {
+      "file": "data-platform/architecture-platform.tsx",
+      "title": "data-platform/architecture-platform"
+    },
+    {
+      "file": "data-platform/data-platform-ppt.tsx",
+      "title": "data-platform/data-platform-ppt"
+    },
+    {
+      "file": "deepseek-landing-page-2.tsx",
+      "title": "deepseek-landing-page-2"
+    },
+    {
+      "file": "deepseek-landing-page.tsx",
+      "title": "deepseek-landing-page"
+    },
+    {
+      "file": "deepseek-spdi.tsx",
+      "title": "deepseek-spdi"
+    },
+    {
+      "file": "digital-guangdong-2025.tsx",
+      "title": "digital-guangdong-2025"
+    },
+    {
+      "file": "digital-platform-react.tsx",
+      "title": "digital-platform-react"
+    },
+    {
+      "file": "efficiency/efficiency_report_ppt.tsx",
+      "title": "efficiency/efficiency_report_ppt"
+    },
+    {
+      "file": "examples/initial-page-code.tsx",
+      "title": "初始页面"
+    },
+    {
+      "file": "git-stats-react-visualization.tsx",
+      "title": "git-stats-react-visualization"
+    },
+    {
+      "file": "gov-insights-display.tsx",
+      "title": "gov-insights-display"
+    },
+    {
+      "file": "healthcare-slide-react.tsx",
+      "title": "healthcare-slide-react"
+    },
+    {
+      "file": "healthcare-slide-revised.tsx",
+      "title": "healthcare-slide-revised"
+    },
+    {
+      "file": "implementation-roadmap.tsx",
+      "title": "implementation-roadmap"
+    },
+    {
+      "file": "industry-competition-react.tsx",
+      "title": "industry-competition-react"
+    },
+    {
+      "file": "industry-insights.tsx",
+      "title": "industry-insights"
+    },
+    {
+      "file": "market-analysis.tsx",
+      "title": "market-analysis"
+    },
+    {
+      "file": "museum-gamified-learning.tsx",
+      "title": "museum-gamified-learning"
+    },
+    {
+      "file": "nanfang-ownership-tech-presentation.tsx",
+      "title": "南方产权智能服务平台技术述标PPT"
+    },
+    {
+      "file": "news-publish.tsx",
+      "title": "news-publish"
+    },
+    {
+      "file": "patent-slides-2.tsx",
+      "title": "patent-slides-2"
+    },
+    {
+      "file": "patent-slides.tsx",
+      "title": "patent-slides"
+    },
+    {
+      "file": "platform-feasibility-study.tsx",
+      "title": "platform-feasibility-study"
+    },
+    {
+      "file": "ppt-slide-03.tsx",
+      "title": "ppt-slide-03"
+    },
+    {
+      "file": "ppt-slides.tsx",
+      "title": "ppt-slides"
+    },
+    {
+      "file": "prompt-handbook-ppt-2.tsx",
+      "title": "prompt-handbook-ppt-2"
+    },
+    {
+      "file": "prompt-handbook-ppt.tsx",
+      "title": "prompt-handbook-ppt"
+    },
+    {
+      "file": "ranqi/12～16.tsx",
+      "title": "ranqi/12～16"
+    },
+    {
+      "file": "ranqi/17～21.tsx",
+      "title": "ranqi/17～21"
+    },
+    {
+      "file": "ranqi/22～25.tsx",
+      "title": "ranqi/22～25"
+    },
+    {
+      "file": "ranqi/2～3.tsx",
+      "title": "ranqi/2～3"
+    },
+    {
+      "file": "ranqi/4～8.tsx",
+      "title": "ranqi/4～8"
+    },
+    {
+      "file": "ranqi/9～11.tsx",
+      "title": "ranqi/9～11"
+    },
+    {
+      "file": "ranqi/case-studies-page.tsx",
+      "title": "ranqi/case-studies-page"
+    },
+    {
+      "file": "ranqi/challenges-analysis-page1.tsx",
+      "title": "ranqi/challenges-analysis-page1"
+    },
+    {
+      "file": "ranqi/implementation-plan-page1.tsx",
+      "title": "ranqi/implementation-plan-page1"
+    },
+    {
+      "file": "ranqi/implementation-plan-page2.tsx",
+      "title": "ranqi/implementation-plan-page2"
+    },
+    {
+      "file": "ranqi/implementation-plan-page3.tsx",
+      "title": "ranqi/implementation-plan-page3"
+    },
+    {
+      "file": "ranqi/implementation-plan-page4.tsx",
+      "title": "ranqi/implementation-plan-page4"
+    },
+    {
+      "file": "ranqi/implementation-plan-page5.tsx",
+      "title": "ranqi/implementation-plan-page5"
+    },
+    {
+      "file": "ranqi/ppt-slide-ai-lab.tsx",
+      "title": "ranqi/ppt-slide-ai-lab"
+    },
+    {
+      "file": "react-nye-menu.tsx",
+      "title": "react-nye-menu"
+    },
+    {
+      "file": "sales-analysis-demo.tsx",
+      "title": "sales-analysis-demo"
+    },
+    {
+      "file": "slides-1.tsx",
+      "title": "slides-1"
+    },
+    {
+      "file": "slides-2.tsx",
+      "title": "slides-2"
+    },
+    {
+      "file": "slides-3.tsx",
+      "title": "slides-3"
+    },
+    {
+      "file": "slides-4.tsx",
+      "title": "slides-4"
+    },
+    {
+      "file": "slides-5.tsx",
+      "title": "slides-5"
+    },
+    {
+      "file": "slides-cover.tsx",
+      "title": "slides-cover"
+    },
+    {
+      "file": "smart-parking/deepseek-smart-parking-ppt-enhanced.tsx",
+      "title": "smart-parking/deepseek-smart-parking-ppt-enhanced"
+    },
+    {
+      "file": "southern-property-platform.tsx",
+      "title": "southern-property-platform"
+    },
+    {
+      "file": "training-slides.tsx",
+      "title": "training-slides"
+    },
+    {
+      "file": "xinjiang-data-platform-ppt.tsx",
+      "title": "新疆数据平台PPT演示"
+    },
+    {
+      "file": "zhitag-demo.tsx",
+      "title": "zhitag-demo"
+    },
+    {
+      "file": "zhuanjia/ai-innovation-ppt.tsx",
+      "title": "zhuanjia/ai-innovation-ppt"
+    },
+    {
+      "file": "zhuanjia/ccs-expert-presentation.tsx",
+      "title": "zhuanjia/ccs-expert-presentation"
+    },
+    {
+      "file": "zhuanjia/ppt-presentation.tsx",
+      "title": "zhuanjia/ppt-presentation"
+    },
+    {
+      "file": "产权/PropertyRightsTechPresentation.tsx",
+      "title": "南方产权智能服务平台 - 技术述标"
+    },
+    {
+      "file": "产权/ppt-tech-bid.tsx",
+      "title": "南方产权智能服务平台 技术述标PPT"
+    },
+    {
+      "file": "印章管理/seal-management-system.tsx",
+      "title": "线上印章管理系统"
+    },
+    {
+      "file": "青马/ai-employee-growth-presentation.tsx",
+      "title": "青年员工AI赋能提升汇报"
+    },
+    {
+      "file": "青马/quiz-app-complete.tsx",
+      "title": "青马/quiz-app-complete"
+    },
+    {
+      "file": "青马/tongfu-youth-survey-ppt.tsx",
+      "title": "通服青年调研报告"
+    },
+    {
+      "file": "青马/youth_innovation_presentation.tsx",
+      "title": "青马/youth_innovation_presentation"
+    }
+  ],
+  "unlisted": [
+    {
+      "file": "examples/test-examples/demo.tsx",
+      "title": "示例页面"
+    }
+  ],
+  "private": [
+    {
+      "file": "PowerService.tsx",
+      "title": "PowerService",
+      "offending": [
+        "react-hook-form",
+        "sonner",
+        "@/components/ui/form"
+      ]
+    },
+    {
+      "file": "about.tsx",
+      "title": "项目介绍",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "cpms/about.tsx",
+      "title": "cpms/about",
+      "offending": [
+        "./changelog.config"
+      ]
+    },
+    {
+      "file": "data-engine-demo.tsx",
+      "title": "data-engine-demo",
+      "offending": [
+        "@radix-ui/react-tabs"
+      ]
+    },
+    {
+      "file": "intelligent-bidding-system.tsx",
+      "title": "intelligent-bidding-system",
+      "offending": [
+        "@radix-ui/react-tabs",
+        "@radix-ui/react-progress",
+        "@radix-ui/react-scroll-area"
+      ]
+    },
+    {
+      "file": "perplexity-pages-tool.tsx",
+      "title": "perplexity-pages-tool",
+      "offending": [
+        "@/lib/openrouter",
+        "@/components/MarkdownRenderer"
+      ]
+    },
+    {
+      "file": "presentation-0.tsx",
+      "title": "presentation-0",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-1.tsx",
+      "title": "presentation-1",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-2.tsx",
+      "title": "presentation-2",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-3.tsx",
+      "title": "presentation-3",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-4.tsx",
+      "title": "presentation-4",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-5.tsx",
+      "title": "presentation-5",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "presentation-6.tsx",
+      "title": "presentation-6",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "slides-myself.tsx",
+      "title": "slides-myself",
+      "offending": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "file": "solution-master-demo.tsx",
+      "title": "solution-master-demo",
+      "offending": [
+        "@radix-ui/react-tabs",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-scroll-area"
+      ]
+    },
+    {
+      "file": "workflow-optimization-guide.tsx",
+      "title": "workflow-optimization-guide",
+      "offending": [
+        "react-markdown"
+      ]
+    },
+    {
+      "file": "zhihua-demo.tsx",
+      "title": "zhihua-demo",
+      "offending": [
+        "@/lib/openrouter"
+      ]
+    },
+    {
+      "file": "产权/ai-content-factory-pro.tsx",
+      "title": "智能内容生成工厂 Pro",
+      "offending": [
+        "@/lib/openrouter",
+        "react-markdown",
+        "@/types/template",
+        "@/lib/templateStorage",
+        "@/data/defaultTemplates",
+        "remark-gfm",
+        "docx",
+        "html2canvas"
+      ]
+    },
+    {
+      "file": "产权/property-rights-ai-demo.tsx",
+      "title": "产权/property-rights-ai-demo",
+      "offending": [
+        "@/lib/openrouter"
+      ]
+    },
+    {
+      "file": "产权/remixed-word.tsx",
+      "title": "产权/remixed-word",
+      "offending": [
+        "@/lib/openrouter"
+      ]
+    },
+    {
+      "file": "产权/template-editor.tsx",
+      "title": "模板编辑器",
+      "offending": [
+        "@/types/template",
+        "@/components/template/TemplateManager",
+        "@/components/template/TemplateEditor",
+        "@/lib/templateStorage"
+      ]
+    }
+  ]
+}

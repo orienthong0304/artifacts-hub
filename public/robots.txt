@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://artifacts.orienthong.cn/sitemap.xml

@@ -1,0 +1,25 @@
+# 主站前端：node 构建 → nginx 静态 + /api 反代
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+ARG VITE_RUNNER_ORIGIN
+ARG VITE_SITE_ORIGIN
+ARG VITE_SITES_DOMAIN_SUFFIX
+ARG VITE_OPERATOR_NAME
+ARG VITE_ICP_NUMBER
+ARG VITE_CONTACT_EMAIL
+ENV VITE_RUNNER_ORIGIN=$VITE_RUNNER_ORIGIN \
+    VITE_SITE_ORIGIN=$VITE_SITE_ORIGIN \
+    VITE_SITES_DOMAIN_SUFFIX=$VITE_SITES_DOMAIN_SUFFIX \
+    VITE_OPERATOR_NAME=$VITE_OPERATOR_NAME \
+    VITE_ICP_NUMBER=$VITE_ICP_NUMBER \
+    VITE_CONTACT_EMAIL=$VITE_CONTACT_EMAIL \
+    SITE_ORIGIN=$VITE_SITE_ORIGIN
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY docker/nginx/web.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80

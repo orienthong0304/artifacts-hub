@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Runner 宿主测试页</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; }
+      body {
+        display: flex;
+        font-family: -apple-system, 'PingFang SC', 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        background: #faf9f5;
+        color: #1a1915;
+      }
+      aside {
+        width: 420px;
+        min-width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px;
+        border-right: 1px solid #e8e5de;
+      }
+      h1 { font-size: 16px; margin: 0; font-family: Georgia, 'Songti SC', serif; }
+      .hint { font-size: 12px; color: #6e6b64; margin: 0; }
+      .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+      button, select {
+        font-size: 13px;
+        padding: 6px 12px;
+        border: 1px solid #e8e5de;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+      }
+      button.primary { background: #1a1915; color: #fff; border-color: #1a1915; }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
+      textarea {
+        flex: 1;
+        min-height: 200px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        padding: 10px;
+        border: 1px solid #e8e5de;
+        border-radius: 8px;
+        resize: none;
+        background: #fff;
+      }
+      #log {
+        height: 150px;
+        overflow: auto;
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 11px;
+        background: #1a1915;
+        color: #d5d1c8;
+        border-radius: 8px;
+        padding: 8px 10px;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      #log .err { color: #ff8a70; }
+      #log .ok { color: #8fd0a5; }
+      main { flex: 1; display: flex; }
+      iframe { flex: 1; border: 0; background: #fff; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <h1>Runner 宿主测试页</h1>
+      <p class="hint">模拟主站：iframe 嵌入 runner，postMessage 发送 render 指令并打印回报消息。</p>
+      <div class="row">
+        <span class="hint">样例：</span>
+        <button data-example="dashboard">仪表盘 (recharts+shadcn)</button>
+        <button data-example="motion">动画 (framer-motion)</button>
+        <button data-example="html">完整 HTML</button>
+      </div>
+      <div class="row">
+        <span class="hint">类型：</span>
+        <select id="kind">
+          <option value="react">react</option>
+          <option value="html">html</option>
+        </select>
+        <button id="render" class="primary" disabled>渲染 ▶</button>
+        <span id="status" class="hint">等待 runner ready…</span>
+      </div>
+      <textarea id="code" spellcheck="false" placeholder="粘贴单文件 React 组件（TSX）或完整 HTML…"></textarea>
+      <div id="log"></div>
+    </aside>
+    <main>
+      <!-- 与生产一致的 sandbox 配置：无 allow-same-origin，runner origin 为 opaque -->
+      <iframe
+        id="runner"
+        src="/"
+        sandbox="allow-scripts allow-forms allow-popups allow-modals"
+        title="artifacts runner"
+      ></iframe>
+    </main>
+    <script type="module" src="/src/test-host.ts"></script>
+  </body>
+</html>
