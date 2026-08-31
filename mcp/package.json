@@ -1,18 +1,14 @@
 {
   "name": "artifacts-mcp",
   "version": "0.1.0",
-  "description": "Artifacts 开放平台 MCP server —— 在 Claude Code / Cursor / Cline 对话里直接发布、更新作品与生成临时链接",
+  "description": "Artifacts 平台 MCP 工具定义（八个动词的单一真值）——由 server 内嵌的 Streamable HTTP 端点 /api/mcp 消费",
   "type": "module",
-  "bin": {
-    "artifacts-mcp": "dist/index.js"
-  },
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "files": [
     "dist",
     "README.md"
   ],
   "scripts": {
-    "dev": "tsx src/index.ts",
     "build": "tsc",
     "test": "vitest run",
     "prepare": "npm run build"
@@ -38,7 +34,7 @@
     "vitest": "^3.0.5"
   },
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./dist/server.js",
     "./server": "./dist/server.js",
     "./api": "./dist/api.js"
   }

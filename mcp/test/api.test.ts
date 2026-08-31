@@ -1,6 +1,6 @@
 // callApi 单测：Bearer 头组装 / 错误映射 / 网络失败提示（注入 fake fetch，不打真实网络）
 import { describe, expect, it } from 'vitest';
-import { callApi, resolveConfig, siteOrigin, DEFAULT_API_BASE } from '../src/api.js';
+import { callApi, siteOrigin, DEFAULT_API_BASE } from '../src/api.js';
 
 /** 构造捕获请求的 fake fetch */
 function makeFakeFetch(status: number, body: unknown, opts: { rawText?: string } = {}) {
@@ -54,9 +54,9 @@ describe('callApi', () => {
     );
   });
 
-  it('401 时附加检查 ARTIFACTS_TOKEN 的可操作提示', async () => {
+  it('401 时附加检查 Token 的可操作提示', async () => {
     const { fetchFn } = makeFakeFetch(401, { error: '请先登录' });
-    await expect(callApi('/me', { ...ctx, fetchFn })).rejects.toThrow(/ARTIFACTS_TOKEN/);
+    await expect(callApi('/me', { ...ctx, fetchFn })).rejects.toThrow(/API Token/);
   });
 
   it('非 2xx 且响应不是 JSON：按状态码提示', async () => {
@@ -85,18 +85,3 @@ describe('siteOrigin', () => {
   });
 });
 
-describe('resolveConfig', () => {
-  it('缺失 ARTIFACTS_TOKEN 时抛中文错误', () => {
-    expect(() => resolveConfig({})).toThrow(/ARTIFACTS_TOKEN/);
-  });
-
-  it('默认 API base 为生产地址，可被 ARTIFACTS_API_BASE 覆盖', () => {
-    expect(resolveConfig({ ARTIFACTS_TOKEN: 'ak_x' })).toEqual({
-      baseUrl: DEFAULT_API_BASE,
-      token: 'ak_x',
-    });
-    expect(
-      resolveConfig({ ARTIFACTS_TOKEN: 'ak_x', ARTIFACTS_API_BASE: 'http://localhost:8091/api' })
-    ).toEqual({ baseUrl: 'http://localhost:8091/api', token: 'ak_x' });
-  });
-});

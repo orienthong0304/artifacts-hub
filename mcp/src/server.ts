@@ -1,6 +1,6 @@
-// Artifacts MCP server 工具注册（契约 §3.8 MCP 小节）：与 transport 解耦。
-// stdio 入口（index.ts，本地进程）与平台内嵌的 Streamable HTTP 端点（server/src/routes/mcp.ts）
-// 共用这一份注册——八个动词只有一份真值。
+// Artifacts MCP server 工具注册（契约 §3.8/§3.13）：八个动词的单一真值。
+// 唯一消费方是平台内嵌的 Streamable HTTP 端点（server/src/routes/mcp.ts）；
+// stdio 入口已于 2026-08-31 删除——远程 MCP（URL + Bearer 即连）不再需要本地进程形态。
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { ApiContext } from './api.js';
 import {

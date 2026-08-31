@@ -289,7 +289,7 @@ export async function getArtifact(
       if (/不存在|404/.test(msg)) {
         return fail(
           new Error(
-            `没有找到「${key}」。可能是：① id/slug 写错了；② 它是私密作品而当前 ARTIFACTS_TOKEN ` +
+            `没有找到「${key}」。可能是：① id/slug 写错了；② 它是私密作品而当前 API Token ` +
               '不属于作者账号（详情端点对无权访问者一律回「不存在」，不区分两者）。' +
               '可先用 list_my_artifacts 确认本 Token 账号下有哪些作品。'
           )

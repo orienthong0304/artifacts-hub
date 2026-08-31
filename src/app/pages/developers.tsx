@@ -77,8 +77,7 @@ const CURL_EXAMPLE = `curl -X POST ${SITE_ORIGIN}/api/artifacts \\
 
 /**
  * MCP 接入（契约 §3.13）：平台内嵌 Streamable HTTP 端点——填 URL + Bearer Token 即连，
- * 零本地安装（2026-08-31 起替代此前的克隆构建 stdio 方案；stdio 入口仍在 mcp/ 保留给
- * 本地开发场景）。
+ * 零本地安装（2026-08-31 起替代此前的克隆构建 stdio 方案，stdio 入口已删除）。
  */
 const MCP_URL = `${SITE_ORIGIN}/api/mcp`;
 
@@ -403,8 +402,6 @@ export default function DevelopersPage() {
           <CodeBlock code={MCP_JSON_CONFIG} />
           <p className="mt-2 text-xs text-ink-muted">
             Token 即 API Token（上方创建），等同你的账号权限，请像密码一样保管。
-            偏好本地进程（stdio）的开发者仍可用仓库 <code className="font-mono">mcp/</code>{' '}
-            子包克隆构建接入。
           </p>
         </div>
 

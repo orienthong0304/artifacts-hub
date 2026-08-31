@@ -2,29 +2,11 @@
 /** 默认 API base（生产环境） */
 export const DEFAULT_API_BASE = 'https://artifacts.orienthong.cn/api';
 
-/** API 调用上下文：由环境变量解析（resolveConfig），测试时直接构造 */
+/** API 调用上下文：由 HTTP 端点按请求构造（server/src/routes/mcp.ts），测试时直接构造 */
 export interface ApiContext {
   baseUrl: string;
   token: string;
   fetchFn?: typeof fetch;
-}
-
-/**
- * 从环境变量解析配置。
- * ARTIFACTS_TOKEN 必填，缺失抛中文错误（index.ts 捕获后 stderr 报错退出）；
- * ARTIFACTS_API_BASE 缺省为生产地址。
- */
-export function resolveConfig(
-  env: Record<string, string | undefined> = process.env
-): { baseUrl: string; token: string } {
-  const token = env.ARTIFACTS_TOKEN?.trim();
-  if (!token) {
-    throw new Error(
-      '缺少环境变量 ARTIFACTS_TOKEN。请先在 https://artifacts.orienthong.cn/developers 创建 API Token，' +
-        '并通过环境变量传入（例如 claude mcp add artifacts --env ARTIFACTS_TOKEN=ak_xxx -- artifacts-mcp）。'
-    );
-  }
-  return { baseUrl: env.ARTIFACTS_API_BASE?.trim() || DEFAULT_API_BASE, token };
 }
 
 /** 由 API base 派生站点 origin（去掉尾部 /api），用于拼作品 / 临时链接 URL */
@@ -34,7 +16,7 @@ export function siteOrigin(baseUrl: string): string {
 
 /**
  * 统一 API 调用：拼 Bearer 头、发 JSON、非 2xx 抛 Error（中文 error 字段透传，
- * 401 附加检查 ARTIFACTS_TOKEN 提示），网络失败给可操作提示。
+ * 401 附加检查 Token 提示），网络失败给可操作提示。
  */
 export async function callApi(
   path: string,
@@ -71,7 +53,7 @@ export async function callApi(
     }
     if (res.status === 401) {
       throw new Error(
-        `${apiError ?? '鉴权失败'}（HTTP 401：请检查 ARTIFACTS_TOKEN 是否有效或已被撤销）`
+        `${apiError ?? '鉴权失败'}（HTTP 401：请检查 Authorization 头里的 API Token 是否有效或已被撤销）`
       );
     }
     throw new Error(apiError ?? `请求失败（HTTP ${res.status}）`);

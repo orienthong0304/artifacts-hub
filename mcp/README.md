@@ -1,94 +1,35 @@
-# artifacts-mcp
+# artifacts-mcp — 平台 MCP 工具定义
 
-> **推荐接入方式已改为平台内嵌的远程 MCP（Streamable HTTP）——零安装：**
->
-> ```bash
-> claude mcp add --transport http artifacts https://artifacts.orienthong.cn/api/mcp \
->   --header "Authorization: Bearer ak_你的Token"
-> ```
->
-> （自托管实例把域名换成你自己的；Token 在站内 `/developers` 页创建。）
-> 本目录的 stdio 形态保留给本地开发 / 离线场景，接入方式见下文。
+Artifacts 平台八个 MCP 动词（发布 / 更新 / 列表 / 读回源码 / 版本历史 / 回滚 / 临时链接 / 能力查询）的**单一真值**。
 
-
-Artifacts 开放平台的 MCP server：让 Claude Code / Cursor / Cline 等 AI Agent 在对话里直接发布、更新作品，并生成限时分享链接。stdio transport，仅依赖平台公开 HTTP API（Bearer Token 鉴权）。
-
-## 前置：创建 API Token
-
-登录 [https://artifacts.orienthong.cn/developers](https://artifacts.orienthong.cn/developers) 创建 Token（`ak_` 开头，明文只显示一次）。Token 等同你的账号权限，请像密码一样保管，勿写入代码或提交到仓库。
-
-## 安装（本地构建）
+本包不是独立运行的 MCP server——它被平台 API 内嵌的 **Streamable HTTP 端点**（`server/src/routes/mcp.ts`，契约 §3.13）消费。接入平台 MCP 不需要安装本包：
 
 ```bash
-git clone <本仓库>
-cd artifact/mcp
-npm install && npm run build
+claude mcp add --transport http artifacts https://你的域名/api/mcp \
+  --header "Authorization: Bearer ak_你的Token"
 ```
 
-构建产物为 `mcp/dist/index.js`（可执行入口，bin 名 `artifacts-mcp`）。
-
-### Claude Code
-
-```bash
-claude mcp add artifacts --env ARTIFACTS_TOKEN=你的Token -- node /绝对路径/artifact/mcp/dist/index.js
-```
-
-### Claude Desktop / Cursor / Cline（JSON 配置）
+Cursor / 其他支持 Streamable HTTP 的客户端：
 
 ```json
 {
   "mcpServers": {
     "artifacts": {
-      "command": "node",
-      "args": ["/绝对路径/artifact/mcp/dist/index.js"],
-      "env": {
-        "ARTIFACTS_TOKEN": "ak_你的Token"
-      }
+      "type": "http",
+      "url": "https://你的域名/api/mcp",
+      "headers": { "Authorization": "Bearer ak_你的Token" }
     }
   }
 }
 ```
 
-Claude Desktop 配置文件位置：macOS `~/Library/Application Support/Claude/claude_desktop_config.json`；Cursor 为项目 `.cursor/mcp.json` 或全局 `~/.cursor/mcp.json`；Cline 在扩展的 MCP Servers 设置里粘贴同款 JSON。
+API Token 在站内 `/developers` 页创建。
 
-## 环境变量
+## 结构
 
-| 变量 | 必填 | 说明 |
-|---|---|---|
-| `ARTIFACTS_TOKEN` | ✓ | 平台 API Token（`ak_` 开头）。缺失时启动即报错退出 |
-| `ARTIFACTS_API_BASE` | - | API 地址，默认 `https://artifacts.orienthong.cn/api`（本地开发可指向 `http://localhost:8091/api`） |
+- `src/server.ts` — `createServer(ctx)`：注册八个工具 + 白名单 resource
+- `src/tools.ts` — 工具 handler（纯函数，`fetchFn` 可注入）
+- `src/api.ts` — 平台 API 客户端（Bearer 鉴权、中文错误透传）
+- `src/generated/whitelist.ts` — 由 `runner/vendor.config.mjs` 单点生成（仓库根 `node scripts/gen-whitelist.mjs --check` 校验一致性）
 
-## 工具
-
-| 工具 | 参数 | 说明 |
-|---|---|---|
-| `publish_artifact` | `title`, `type`(`react`\|`html`), `code`, `description?`, `visibility?`(缺省 `unlisted`) | 发布单文件作品，返回访问链接 `/a/{slug}`。`public` 且待审核时链接即时可用，审核通过后进广场 |
-| `update_artifact` | `id`, `title?`, `description?`, `code?`, `visibility?` | 同链接更新：slug 不变，原链接即时呈现新内容；内容变更自动留版本快照 |
-| `list_my_artifacts` | `q?`, `type?` | 列出账号下全部作品（id / slug / 标题 / 类型 / 可见性 / 浏览量 / 链接） |
-| `create_temp_link` | `artifactId`, `expiresInHours?`(1/6/12/24/72/168/720，缺省 24), `note?` | 生成限时访问链接 `/t/{token}`：豁免可见性与访问密码，到期自动失效，不影响原链接 |
-
-对话示例：「把这个页面发布到 Artifacts，标题叫贪吃蛇」「更新刚才那个作品的代码」「给我的私密作品生成一个 24 小时的临时链接发给客户」。
-
-## 开发
-
-```bash
-npm run dev    # tsx 直跑 src/index.ts
-npm run build  # tsc → dist/
-npm test       # vitest 单测（注入 fake fetch，不打真实网络）
-```
-
-## npm 发布指引（站长执行）
-
-包已按发布形态配置（`bin` 指向 `dist/index.js`，`files` 仅含 `dist` 与 README）：
-
-```bash
-cd mcp
-npm run build && npm test
-npm publish --access public
-```
-
-发布后用户即可免克隆直用：
-
-```bash
-claude mcp add artifacts --env ARTIFACTS_TOKEN=你的Token -- npx -y artifacts-mcp
-```
+> stdio 入口已于 2026-08-31 删除：远程 MCP（URL + Bearer 即连）不再需要本地进程形态。

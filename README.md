@@ -10,7 +10,7 @@
 - **沙箱渲染**：用户代码只在无 `allow-same-origin` 的 opaque-origin iframe 中执行，拿不到站点 cookie 与 DOM
 - **ZIP 站点托管**：Vite / Next 等构建产物打包上传，发布为静态站点（含 SPA fallback）
 - **版本历史 / 临时链接 / 访问密码**：作品级的分享控制
-- **Agent 接入**：`mcp/` 目录是完整的 MCP server（发布 / 更新 / 读回 / 版本 / 临时链接 8 个动词）
+- **Agent 接入**：内建远程 MCP（`/api/mcp`，Streamable HTTP）——发布 / 更新 / 读回 / 版本 / 临时链接 8 个动词，填 URL + Token 即连
 
 ## 架构
 
@@ -19,7 +19,7 @@
 | 主站前端 | `src/` | Vite + React 18 + shadcn/ui |
 | 后端 API | `server/` | Hono + node-postgres，独立 package.json |
 | 渲染器 | `runner/` | 独立 Vite 项目：@babel/standalone 浏览器端转译 + vendor 白名单 |
-| MCP server | `mcp/` | @modelcontextprotocol/sdk，经 API Token 调平台 API |
+| MCP 工具定义 | `mcp/` | @modelcontextprotocol/sdk；由 API 内嵌的 `/api/mcp`（Streamable HTTP）消费 |
 
 ## 快速开始（Docker Compose）
 
@@ -98,7 +98,6 @@ Cursor / 其他客户端用 JSON 配置：
 ```
 
 API Token 在站内 `/developers` 页创建。之后对 Agent 说「把这个页面发布到我的 Artifacts」即可。
-（偏好本地进程的开发者仍可用 `mcp/` 子包的 stdio 形态，见其 README。）
 
 ## 开发
 
